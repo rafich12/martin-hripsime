@@ -6,6 +6,15 @@ const $ = id => document.getElementById(id);
 const clamp = (v, a = 0, b = 1) => v < a ? a : v > b ? b : v;
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const p2 = n => String(n).padStart(2, '0');
+const BURG = document.documentElement.dataset.theme === 'burgundy';   // второй вариант: бордовая тема
+
+// «Թերթեք» прокручивает к фото скриптом: во втором варианте стоит <base href="../">, и простая ссылка #photo увела бы на первый
+document.querySelector('.scroll-hint')?.addEventListener('click', e => {
+  e.preventDefault();
+  const to = document.getElementById('photo'), y0 = scrollY;
+  to.scrollIntoView({ behavior: 'smooth' });
+  setTimeout(() => { if (Math.abs(scrollY - y0) < 2) to.scrollIntoView({ behavior: 'instant' }); }, 600);   // если плавная прокрутка не пошла
+});
 
 /* ---------- дата ---------- */
 const MN = ['Հունվար', 'Փետրվար', 'Մարտ', 'Ապրիլ', 'Մայիս', 'Հունիս', 'Հուլիս', 'Օգոստոս', 'Սեպտեմբեր', 'Հոկտեմբեր', 'Նոյեմբեր', 'Դեկտեմբեր'];
@@ -72,11 +81,13 @@ function sprig(seed) {
   S = seed;
   const s = 360, c = document.createElement('canvas'); c.width = c.height = s;
   const x = c.getContext('2d');
-  const cols = [['#8d9b6c', '#738256'], ['#a3b07f', '#86955f'], ['#7a8a5a', '#617047'], ['#b5c094', '#98a676']];
+  const cols = BURG
+    ? [['#a32a4f', '#7f1a38'], ['#c46581', '#a0405e'], ['#851838', '#62102a'], ['#d692a6', '#b46c83']]
+    : [['#8d9b6c', '#738256'], ['#a3b07f', '#86955f'], ['#7a8a5a', '#617047'], ['#b5c094', '#98a676']];
   const branch = (x0, y0, len, ang, bend, L) => {
     const N = 24, pts = []; let px = x0, py = y0, a = ang;
     for (let i = 0; i <= N; i++) { pts.push([px, py, a]); a += bend / N; px += Math.cos(a) * len / N; py += Math.sin(a) * len / N; }
-    x.strokeStyle = '#6a774f'; x.lineWidth = 1.5; x.lineCap = 'round';
+    x.strokeStyle = BURG ? '#6e1630' : '#6a774f'; x.lineWidth = 1.5; x.lineCap = 'round';
     x.beginPath(); x.moveTo(pts[0][0], pts[0][1]); pts.forEach(p => x.lineTo(p[0], p[1])); x.stroke();
     for (let i = 2; i < N; i += 2) {
       const [qx, qy, qa] = pts[i], t = i / N, l = L * (1 - t * .45) * rnd(.85, 1.15);
@@ -87,7 +98,7 @@ function sprig(seed) {
   branch(24, 46, 300, .02, .95, 30);
   branch(46, 24, 250, 1.45, -.75, 27);
   branch(40, 40, 170, .72, .25, 22);
-  x.fillStyle = '#c9a9a4';
+  x.fillStyle = BURG ? '#e3b7c4' : '#c9a9a4';
   for (let i = 0; i < 7; i++) { x.beginPath(); x.arc(rnd(70, 150), rnd(70, 150), rnd(2.5, 4), 0, Math.PI * 2); x.fill(); }
   return c.toDataURL('image/png');
 }

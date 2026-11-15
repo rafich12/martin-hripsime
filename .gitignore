@@ -3,3 +3,6 @@ phone-*.png
 phone-steps.json
 # старое фото для арки, больше не используется
 img/portal.jpg
+
+# сборщик второго варианта
+make-v2.ps1

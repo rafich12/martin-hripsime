@@ -253,6 +253,24 @@ fieldset{border:0;min-width:0}
 .music.off i{animation:none;transform:scaleY(.35)}
 @keyframes eq{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
 
+/* ========== Вариант 2: бордовая тема (2/index.html, <html data-theme="burgundy">) ==========
+   Всё, что было зелёным, становится бордовым; конверт бордовый, печать белая (в scene.js), «Քարտեզ» — чёрная. */
+/* вишнёвый оттенок бордового: основной #911E42 */
+[data-theme=burgundy]{
+  --sage:#911e42; --sage-d:#74142f; --sage-l:#ebc7d1; --olive:#5e0f26;
+  --rose:#b23a5e; --rose-d:#74142f;
+}
+[data-theme=burgundy] body{background:#5c0f25}
+[data-theme=burgundy] body::before{background:radial-gradient(120% 90% at 50% 40%,#a63a5a 0%,#7f1a38 55%,#520c22 100%)}
+[data-theme=burgundy] .paper{background-color:#7a1234;
+  background-image:var(--grain,none),var(--emboss,none),var(--marble,none),radial-gradient(130% 90% at 50% 35%,#931c40 0%,#76112f 55%,#540a22 100%)}
+[data-theme=burgundy] .rt-dots{stroke:#cf8ea2}
+[data-theme=burgundy] .cal::before{border-color:#ebc7d1}
+[data-theme=burgundy] .cal::after{border-color:rgba(145,30,66,.25)}
+[data-theme=burgundy] .scroll-hint{box-shadow:0 8px 22px rgba(45,10,22,.28),0 0 0 1px rgba(145,30,66,.3)}
+[data-theme=burgundy] .slider svg{filter:drop-shadow(0 3px 5px rgba(100,15,40,.3))}
+[data-theme=burgundy] .ev-map{color:var(--ink)}
+
 @media (prefers-reduced-motion:reduce){
   .rv{transition:opacity .6s ease;transform:none}
   .seal-ring,.env-hint,.scroll-hint svg{animation:none}

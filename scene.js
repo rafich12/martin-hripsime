@@ -7,6 +7,7 @@ const qs = new URLSearchParams(location.search);
 const TAU = Math.PI * 2;
 const $ = id => document.getElementById(id);
 const root = document.documentElement;
+const THEME = root.dataset.theme || '';   // 'burgundy' — второй вариант (2/index.html)
 
 /* ---------- случайность: одинаковый рисунок при каждом открытии ---------- */
 let S = 1;
@@ -398,8 +399,8 @@ function paintFlowersFront(ctx) {
 
 /* ---------- бумага конверта и печать ---------- */
 const svgUrl = s => `url("data:image/svg+xml,${encodeURIComponent(s)}")`;
-root.style.setProperty('--grain', svgUrl(`<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='a' x='0' y='0'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 .96 0 0 0 .6 -.2'/></filter><filter id='b' x='0' y='0'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' seed='4' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .12 0 0 0 0 .14 0 0 0 0 .08 0 0 0 .6 -.22'/></filter><rect width='240' height='240' filter='url(#a)'/><rect width='240' height='240' filter='url(#b)'/></svg>`));
-root.style.setProperty('--marble', svgUrl(`<svg xmlns='http://www.w3.org/2000/svg' width='600' height='1000' preserveAspectRatio='none'><filter id='m' x='0' y='0'><feTurbulence type='fractalNoise' baseFrequency='.004 .007' numOctaves='5' seed='7'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 .94 1.5 0 0 0 -.68'/></filter><rect width='600' height='1000' filter='url(#m)' opacity='.5'/></svg>`));
+root.style.setProperty('--grain', svgUrl(`<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='a' x='0' y='0'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 .96 0 0 0 ${THEME === 'burgundy' ? '.32 -.12' : '.6 -.2'}'/></filter><filter id='b' x='0' y='0'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' seed='4' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .12 0 0 0 0 .14 0 0 0 0 .08 0 0 0 .6 -.22'/></filter><rect width='240' height='240' filter='url(#a)'/><rect width='240' height='240' filter='url(#b)'/></svg>`));
+root.style.setProperty('--marble', svgUrl(`<svg xmlns='http://www.w3.org/2000/svg' width='600' height='1000' preserveAspectRatio='none'><filter id='m' x='0' y='0'><feTurbulence type='fractalNoise' baseFrequency='.004 .007' numOctaves='5' seed='7'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 .94 1.5 0 0 0 -.68'/></filter><rect width='600' height='1000' filter='url(#m)' opacity='${THEME === 'burgundy' ? .14 : .5}'/></svg>`));   // на вишнёвой бумаге разводы слабее, иначе она уходит в розовый
 (() => {
   const sp = `<path d='M30 172 C58 140 78 112 96 62'/><path d='M50 148 C36 146 27 136 25 124 C39 126 49 134 50 148Z'/><path d='M58 138 C70 132 78 120 78 108 C66 112 58 124 58 138Z'/><path d='M69 120 C55 116 47 106 47 94 C61 98 69 108 69 120Z'/><path d='M79 104 C91 98 97 86 97 74 C85 78 79 90 79 104Z'/><path d='M89 82 C79 76 75 66 77 56 C87 62 91 72 89 82Z'/><path d='M140 30 C150 42 166 46 178 40 M152 38 C150 50 156 60 166 66'/><circle cx='150' cy='150' r='3.2'/><circle cx='161' cy='159' r='2.2'/><circle cx='145' cy='163' r='2.6'/><circle cx='156' cy='170' r='1.8'/>`;
   root.style.setProperty('--emboss', svgUrl(`<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><g fill='none' stroke-linecap='round' stroke-width='1.2'><g stroke='rgba(255,255,245,.17)' transform='translate(-.7 -.7)'>${sp}</g><g stroke='rgba(36,44,24,.2)' transform='translate(.7 .7)'>${sp}</g></g></svg>`));
@@ -419,21 +420,25 @@ function buildSeal() {
   }
   const [a, b] = D.initials;
   const mono = `${a}<tspan font-family="Great Vibes, cursive" font-size="20" font-weight="400" dx="2" dy="-2">&amp;</tspan><tspan dx="2" dy="2">${b}</tspan>`;
+  // цвета воска: розовый (вариант 1) или белый (вариант 2, бордовая тема)
+  const C = THEME === 'burgundy'
+    ? { g: ['#ffffff', '#f2eee9', '#d3cbc2'], rim: '#6f655c', rimOp: .3, press: '#ddd5cc', pressOp: .5, hi: '#ffffff', lo: '#857a70', lauD: '#8a7f75', lauL: '#ffffff', txtD: '#7d7268', txtL: '#ffffff', txt: '#cfc6bc', shadow: '#2a0d15', gloss: .55 }
+    : { g: ['#da959e', '#bd6d79', '#8b4250'], rim: '#5a2430', rimOp: .38, press: '#a85866', pressOp: .42, hi: '#f6cdd2', lo: '#6b2d3a', lauD: '#77343f', lauL: '#f3c4ca', txtD: '#6b2d3a', txtL: '#f8d6db', txt: '#b0606d', shadow: '#2b2418', gloss: .24 };
   $('sealSvg').innerHTML = `<defs>
-    <radialGradient id="wx" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#da959e"/><stop offset=".5" stop-color="#bd6d79"/><stop offset="1" stop-color="#8b4250"/></radialGradient>
-    <radialGradient id="wr" cx="50%" cy="50%" r="50%"><stop offset=".76" stop-color="#5a2430" stop-opacity="0"/><stop offset="1" stop-color="#5a2430" stop-opacity=".38"/></radialGradient>
-    <filter id="ws" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="3.5" stdDeviation="3" flood-color="#2b2418" flood-opacity=".5"/></filter>
+    <radialGradient id="wx" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="${C.g[0]}"/><stop offset=".5" stop-color="${C.g[1]}"/><stop offset="1" stop-color="${C.g[2]}"/></radialGradient>
+    <radialGradient id="wr" cx="50%" cy="50%" r="50%"><stop offset=".76" stop-color="${C.rim}" stop-opacity="0"/><stop offset="1" stop-color="${C.rim}" stop-opacity="${C.rimOp}"/></radialGradient>
+    <filter id="ws" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="3.5" stdDeviation="3" flood-color="${C.shadow}" flood-opacity=".5"/></filter>
     <filter id="wb"><feGaussianBlur stdDeviation="2.6"/></filter></defs>
     <path d="${d}" fill="url(#wx)" filter="url(#ws)"/><path d="${d}" fill="url(#wr)"/>
-    <circle cx="60" cy="60" r="37" fill="#a85866" opacity=".42"/>
-    <circle cx="60" cy="60" r="37.5" fill="none" stroke="#f6cdd2" stroke-opacity=".55" stroke-width="1.6" transform="translate(-.8 -.8)"/>
-    <circle cx="60" cy="60" r="37.5" fill="none" stroke="#6b2d3a" stroke-opacity=".55" stroke-width="1.6" transform="translate(.8 .8)"/>
-    <g fill="#77343f" opacity=".55" transform="translate(.6 .6)">${laurel}</g><g fill="#f3c4ca" opacity=".55" transform="translate(-.5 -.5)">${laurel}</g>
+    <circle cx="60" cy="60" r="37" fill="${C.press}" opacity="${C.pressOp}"/>
+    <circle cx="60" cy="60" r="37.5" fill="none" stroke="${C.hi}" stroke-opacity=".55" stroke-width="1.6" transform="translate(-.8 -.8)"/>
+    <circle cx="60" cy="60" r="37.5" fill="none" stroke="${C.lo}" stroke-opacity=".55" stroke-width="1.6" transform="translate(.8 .8)"/>
+    <g fill="${C.lauD}" opacity=".55" transform="translate(.6 .6)">${laurel}</g><g fill="${C.lauL}" opacity=".55" transform="translate(-.5 -.5)">${laurel}</g>
     <g font-family="Noto Serif Armenian, serif" font-weight="400" font-size="26" text-anchor="middle">
-      <text x="60" y="69" fill="#6b2d3a" opacity=".6" transform="translate(.9 .9)">${mono}</text>
-      <text x="60" y="69" fill="#f8d6db" opacity=".6" transform="translate(-.8 -.8)">${mono}</text>
-      <text x="60" y="69" fill="#b0606d">${mono}</text></g>
-    <ellipse cx="42" cy="34" rx="16" ry="7" fill="#fff" opacity=".24" transform="rotate(-32 42 34)" filter="url(#wb)"/>`;
+      <text x="60" y="69" fill="${C.txtD}" opacity=".6" transform="translate(.9 .9)">${mono}</text>
+      <text x="60" y="69" fill="${C.txtL}" opacity=".6" transform="translate(-.8 -.8)">${mono}</text>
+      <text x="60" y="69" fill="${C.txt}">${mono}</text></g>
+    <ellipse cx="42" cy="34" rx="16" ry="7" fill="#fff" opacity="${C.gloss}" transform="rotate(-32 42 34)" filter="url(#wb)"/>`;
 }
 
 /* ---------- сборка сцены ---------- */
