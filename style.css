@@ -61,7 +61,7 @@ a{color:inherit;text-decoration:none}
 /* ========== Заставка ========== */
 .hero{position:relative;height:100vh;height:100svh;min-height:540px;overflow:hidden;background:#ece6d6}
 .scene{position:absolute;inset:0;overflow:hidden}
-.sky{position:absolute;inset:0;background:linear-gradient(180deg,#eee8da 0%,#f4eee1 34%,#f5ecdb 50%,#ece5d2 62%,#dcdfc8 100%)}
+.sky{position:absolute;inset:0;background:linear-gradient(180deg,#efe8db 0%,#f5efe3 30%,#f4ebdc 50%,#eadfcd 70%,#e1d4be 100%)}
 .sun{position:absolute;left:8%;right:8%;top:26%;height:42%;background:radial-gradient(closest-side,rgba(255,251,238,.95),rgba(255,247,228,0))}
 .ly{position:absolute;pointer-events:none;will-change:transform,opacity}
 .ly canvas{position:absolute;inset:0;width:100%;height:100%}
@@ -69,24 +69,23 @@ a{color:inherit;text-decoration:none}
 .ly.sw .sway{animation:sway 7s ease-in-out infinite}
 .ly.sw.r .sway{animation-duration:8.5s;animation-delay:-2s}
 @keyframes sway{0%,100%{transform:rotate(0)}50%{transform:rotate(.9deg)}}
-.vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(80% 62% at 50% 60%,rgba(18,24,12,0) 35%,rgba(18,24,12,.6) 100%)}
+.vig{display:none}
 /* пара вырезана из студийного фона и стоит в саду; лёгкая тень отделяет белую одежду от светлого неба */
-.couple{position:absolute;max-width:none;filter:saturate(.96) sepia(.04) drop-shadow(0 6px 14px rgba(45,52,32,.28));
+.couple{position:absolute;max-width:none;filter:saturate(.96) sepia(.04) drop-shadow(0 3px 6px rgba(60,55,40,.16));
   -webkit-mask-image:linear-gradient(180deg,#000 88%,transparent 100%);mask-image:linear-gradient(180deg,#000 88%,transparent 100%)}
-/* имена — ниже лиц, на уровне груди пары; мягкое кремовое свечение для читаемости */
-.hero-glow{position:absolute;left:-10%;right:-10%;top:38%;height:22%;z-index:2;pointer-events:none;opacity:0;
-  background:radial-gradient(closest-side,rgba(250,246,236,.7),rgba(250,246,236,0))}
-.kicker{position:absolute;left:0;right:0;top:calc(7% + env(safe-area-inset-top));z-index:3;text-align:center;opacity:0;pointer-events:none;
-  font:600 10px/1 var(--sans);letter-spacing:.38em;text-transform:uppercase;color:var(--sage-d);text-shadow:0 0 8px rgba(251,247,238,1),0 0 3px rgba(251,247,238,1)}
-.hero-text{position:absolute;left:0;right:0;top:43%;z-index:3;text-align:center;padding:0 18px;pointer-events:none}
+/* имена — над парой (на светлом небе), крупно, в три строки */
+.hero-glow{position:absolute;left:-10%;right:-10%;top:0;height:34%;z-index:2;pointer-events:none;opacity:0;
+  background:radial-gradient(closest-side,rgba(250,246,236,.75),rgba(250,246,236,0))}
+.hero-text{position:absolute;left:0;right:0;top:calc(5.5% + env(safe-area-inset-top));z-index:3;text-align:center;padding:0 18px;pointer-events:none}
 .hero-text [data-a]{opacity:0}
-.names{display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:0 .22em;font:300 clamp(30px,9.6vw,42px)/1.15 var(--arm);font-stretch:82%;letter-spacing:.01em;color:var(--rose-d);
-  text-shadow:0 0 16px rgba(251,247,238,.95),0 0 5px rgba(251,247,238,.95),0 0 30px rgba(251,247,238,.7)}
-.names .amp{font:400 1.05em/1 var(--script);color:var(--sage-d)}
-.hero-date{margin-top:12px;font:500 15px/1 var(--serif);letter-spacing:.32em;color:var(--olive);text-shadow:0 0 10px rgba(251,247,238,1),0 0 4px rgba(251,247,238,1)}
-.scroll-hint{position:absolute;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));z-index:4;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:2px;
-  font:600 9.5px/1 var(--sans);letter-spacing:.3em;text-transform:uppercase;color:#fffaf0;opacity:0;text-shadow:0 1px 6px rgba(60,40,40,.6)}
-.scroll-hint svg{width:22px;height:22px;fill:none;stroke:#fffaf0;stroke-width:1.6;animation:bob 1.8s ease-in-out infinite;filter:drop-shadow(0 1px 3px rgba(60,40,40,.6))}
+.names{display:flex;flex-direction:column;align-items:center;font:300 min(12vw,6svh,54px)/1.02 var(--arm);font-stretch:82%;letter-spacing:.01em;color:var(--rose-d);
+  text-shadow:0 0 18px rgba(251,247,238,.9),0 0 4px rgba(251,247,238,.9)}
+.names .amp{font:400 .66em/1 var(--script);color:var(--sage-d);margin:0 0 2px}
+/* «Թերթեք» — заметная кнопка-плашка внизу экрана */
+.scroll-hint{position:absolute;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));z-index:4;transform:translateX(-50%);display:flex;align-items:center;gap:8px;
+  padding:12px 18px 12px 24px;border-radius:40px;background:rgba(251,248,242,.94);box-shadow:0 8px 22px rgba(40,38,28,.28),0 0 0 1px rgba(93,106,74,.25);
+  font:700 12px/1 var(--sans);letter-spacing:.3em;text-transform:uppercase;color:var(--sage-d);opacity:0;white-space:nowrap}
+.scroll-hint svg{width:20px;height:20px;fill:none;stroke:var(--sage-d);stroke-width:2;animation:bob 1.6s ease-in-out infinite}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
 .petals{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden;display:none}
 .petals.on{display:block}

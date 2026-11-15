@@ -227,13 +227,14 @@ function soften(L, px) {
 /* --- горы --- */
 function paintMount(ctx) {
   const x0 = -.25 * W, x1 = 1.25 * W, yb = 1.3 * H;
-  const p1 = ridge(ctx, x0, x1, .47 * H, .075 * H, TAU / (W * 1.05), 1.3, '#b3bcaa', '#e2e1d0', yb);
-  hatch(ctx, p1, '#dfe2d5', .35, -.6, 6);
-  const p2 = ridge(ctx, x0, x1, .535 * H, .05 * H, TAU / (W * .8), 4.1, '#a1ac90', '#d9dbc7', yb);
-  hatch(ctx, p2, '#c3cab2', .32, .55, 5);
-  const g = ctx.createLinearGradient(0, .5 * H, 0, .66 * H);
-  g.addColorStop(0, 'rgba(241,237,223,0)'); g.addColorStop(.6, 'rgba(241,237,223,.72)'); g.addColorStop(1, 'rgba(236,233,218,.95)');
-  ctx.fillStyle = g; ctx.fillRect(x0, .5 * H, x1 - x0, yb - .5 * H);
+  // тёплые бежевые горы без зелени: мягкий фон за парой
+  const p1 = ridge(ctx, x0, x1, .5 * H, .07 * H, TAU / (W * 1.05), 1.3, '#d6cbb9', '#ece5d8', yb);
+  hatch(ctx, p1, '#f1ebe0', .4, -.6, 6);
+  const p2 = ridge(ctx, x0, x1, .575 * H, .045 * H, TAU / (W * .8), 4.1, '#cbbfab', '#e7ddcd', yb);
+  hatch(ctx, p2, '#e9e0d1', .35, .55, 5);
+  const g = ctx.createLinearGradient(0, .53 * H, 0, .72 * H);
+  g.addColorStop(0, 'rgba(242,236,225,0)'); g.addColorStop(.6, 'rgba(242,236,225,.7)'); g.addColorStop(1, 'rgba(236,228,214,.95)');
+  ctx.fillStyle = g; ctx.fillRect(x0, .53 * H, x1 - x0, yb - .53 * H);
 }
 /* --- холмы, рощи и луг --- */
 function paintHills(ctx) {
@@ -307,7 +308,8 @@ function paintArch(ctx) {
 /* --- пара (вырезана из студийного фона) стоит в саду за цветами; камера прилетает к ней --- */
 // размеры: макушки на 19% высоты, низ фото уходит за клумбу (86%)
 function coupleBox() {
-  const ratio = 1061 / 1600, headTop = .089, head = .19 * H, bottom = .86 * H;
+  // пара крупно: макушки на 26% высоты (над ними имена), низ фото — у нижнего края экрана
+  const ratio = 1061 / 1600, headTop = .089, head = .26 * H, bottom = H + 2;
   const h = (bottom - head) / (1 - headTop), w = h * ratio;
   return { x: VP.x - w / 2, y: head - headTop * h, w, h };
 }
@@ -440,7 +442,6 @@ const env = $('env'), envPocket = $('envPocket'), envFlap = $('envFlap'), sealWr
 const envTop = env.querySelector('.env-top'), envNames = env.querySelector('.env-names'), envHint = env.querySelector('.env-hint');
 const anim = [...document.querySelectorAll('.hero [data-a]')];
 const hint = document.querySelector('.scroll-hint');
-const petals = $('petals');
 const tick = () => new Promise(r => setTimeout(r, 0));
 
 async function build() {
@@ -449,21 +450,12 @@ async function build() {
   const r = hero.getBoundingClientRect();
   W = Math.round(r.width); H = Math.round(r.height); U = W / 390; VP = { x: .5 * W, y: .62 * H };
   scene.style.cssText = `inset:auto;left:50%;top:50%;width:${W}px;height:${H}px;margin:${-H / 2}px 0 0 ${-W / 2}px;transform-origin:50% 62%`;
+  // по просьбе Рафа без зелени: только бежевые горы и пара (лес, ветви и цветы отключены, функции остались выше)
   const jobs = [
     () => paintMount(camLayer('mount', 12, 'end', 1.3).ctx),
-    () => paintHills(camLayer('hills', 6, 'end', 1.3).ctx),
-    () => paintArch(camLayer('arch', 4, 'end', 1.25).ctx),
-    () => paintMid(camLayer('mid', 1.4, 'end', 1.3).ctx),
-    () => paintCouple(camLayer('couple', 1.25, 'end', 1, false)),
-    () => { const L = camLayer('near2', 2, 'start'); paintNear2(L.ctx); soften(L, 7); },
-    () => { const L = camLayer('near1', 1, 'start'); paintNear1(L.ctx); soften(L, 10); },
-    () => { const L = camLayer('fg', .55, 'start'); paintFg(L.ctx); soften(L, 14); L.always = true; },
-    () => paintBranches(rectLayer('brL', 0, -.06 * H, W, .48 * H, 'sw').ctx, -1),
-    () => paintBranches(rectLayer('brR', 0, -.06 * H, W, .48 * H, 'sw r').ctx, 1),
-    () => paintFlowersBack(rectLayer('flB', 0, .56 * H, W, .44 * H).ctx),
-    () => paintFlowersFront(rectLayer('flF', 0, .76 * H, W, .24 * H).ctx)
+    () => paintCouple(camLayer('couple', 1.25, 'end', 1, false))
   ];
-  const keys = ['mount', 'hills', 'arch', 'mid', 'couple', 'near2', 'near1', 'fg', 'brL', 'brR', 'flB', 'flF'];
+  const keys = ['mount', 'couple'];
   for (let i = 0; i < jobs.length; i++) { seedFrom(keys[i] + '-1013'); jobs[i](); render(frozen ? pendingT ?? 0 : 0); await tick(); }
   READY = true; env.classList.remove('loading');
   if (pendingT !== null) render(pendingT);
@@ -475,12 +467,11 @@ async function build() {
 
 /* ---------- раскадровка (секунды после нажатия на печать) ---------- */
 const T = {
-  flap: [.12, 1.05], dive: [.8, 2.05], envFade: [1.6, 2.05], fly: [.6, 4.6],
-  brL: [3.75, 5.2], brR: [3.9, 5.35], flB: [3.8, 5.2], flF: [4.0, 5.4],
-  glow: [4.1, 5.4], k: [4.35, 5.5], n1: [4.6, 5.9], amp: [4.95, 6.0], n2: [5.1, 6.4], date: [5.5, 6.6], hint: [6.2, 7.0],
-  unlock: 5.6, end: 7.0
+  flap: [.12, 1.05], dive: [.8, 2.05], envFade: [1.6, 2.05], fly: [.6, 3.3],
+  glow: [2.5, 3.6], n1: [2.7, 3.9], amp: [3.0, 4.0], n2: [3.1, 4.3], hint: [3.8, 4.6],
+  unlock: 3.6, end: 4.6
 };
-const TRAVEL = 2.2;
+const TRAVEL = 1.0;   // камера мягко приближается к паре (без леса — короткий путь)
 
 function camera(e) {
   for (const L of CAM) {
@@ -512,13 +503,6 @@ function render(t) {
   // камера
   const e = ease(seg(t, T.fly));
   camera(e);
-  vig.style.opacity = (.85 * (1 - e)).toFixed(3);
-  // ветви, цветы
-  const fx = (k, f) => { if (FX[k]) f(FX[k].wrap, easeOut(seg(t, T[k]))); };
-  fx('brL', (w, o) => { w.style.transform = `translate(${-(1 - o) * 8}%, ${-(1 - o) * 100}%)`; });
-  fx('brR', (w, o) => { w.style.transform = `translate(${(1 - o) * 8}%, ${-(1 - o) * 100}%)`; });
-  fx('flB', (w, o) => { w.style.transform = `translateY(${(1 - o) * 60}%)`; w.style.opacity = Math.min(1, o * 1.6); });
-  fx('flF', (w, o) => { w.style.transform = `translateY(${(1 - o) * 75}%)`; w.style.opacity = Math.min(1, o * 1.6); });
   // надписи
   for (const el of anim) {
     const k = el.dataset.a, o = easeOut(seg(t, T[k]));
@@ -528,7 +512,6 @@ function render(t) {
     el.style.transform = k === 'hint' ? `translate(-50%, ${y}px)` : (o < 1 ? `translateY(${y}px)` : '');
     el.style.filter = o < 1 && k !== 'hint' ? `blur(${((1 - o) * 7).toFixed(2)}px)` : '';
   }
-  petals.classList.toggle('on', t >= T.k[0]);
   if (t >= T.unlock) unlock();
 }
 function unlock() {
@@ -579,13 +562,6 @@ if (D.music) {
   audio = new Audio(D.music); audio.loop = true; audio.preload = 'auto';
   musicBtn.hidden = false; musicBtn.classList.add('off');
   musicBtn.addEventListener('click', () => { if (audio.paused) { audio.play(); musicBtn.classList.remove('off'); } else { audio.pause(); musicBtn.classList.add('off'); } });
-}
-
-// лепестки
-for (let i = 0; i < 12; i++) {
-  const p = document.createElement('i');
-  p.style.cssText = `left:${(i * 8.3 + Math.random() * 6).toFixed(1)}%;--dx:${(Math.random() * 120 - 30).toFixed(0)}px;animation-duration:${(9 + Math.random() * 7).toFixed(1)}s;animation-delay:${(i * .9 + Math.random()).toFixed(1)}s;transform:scale(${(.7 + Math.random() * .6).toFixed(2)})`;
-  petals.appendChild(p);
 }
 
 // при смене размера окна сцена масштабируется, чтобы закрывать экран
