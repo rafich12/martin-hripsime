@@ -458,12 +458,11 @@ async function build() {
   const r = hero.getBoundingClientRect();
   W = Math.round(r.width); H = Math.round(r.height); U = W / 390; VP = { x: .5 * W, y: .62 * H };
   scene.style.cssText = `inset:auto;left:50%;top:50%;width:${W}px;height:${H}px;margin:${-H / 2}px 0 0 ${-W / 2}px;transform-origin:50% 62%`;
-  // по просьбе Рафа без зелени: только бежевые горы и пара (лес, ветви и цветы отключены, функции остались выше)
+  // по просьбе Рафа: только пара на чистом белом фоне (лес, ветви, цветы и горы отключены, функции остались выше)
   const jobs = [
-    () => paintMount(camLayer('mount', 12, 'end', 1.3).ctx),
     () => paintCouple(camLayer('couple', 1.25, 'end', 1, false))
   ];
-  const keys = ['mount', 'couple'];
+  const keys = ['couple'];
   for (let i = 0; i < jobs.length; i++) { seedFrom(keys[i] + '-1013'); jobs[i](); render(frozen ? pendingT ?? 0 : 0); await tick(); }
   READY = true; env.classList.remove('loading');
   if (pendingT !== null) render(pendingT);
