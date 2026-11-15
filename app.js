@@ -6,7 +6,9 @@ const $ = id => document.getElementById(id);
 const clamp = (v, a = 0, b = 1) => v < a ? a : v > b ? b : v;
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const p2 = n => String(n).padStart(2, '0');
-const BURG = document.documentElement.dataset.theme === 'burgundy';   // второй вариант: бордовая тема
+const THEME = document.documentElement.dataset.theme || '';
+const BURG = THEME === 'burgundy';   // второй вариант: вишнёвая тема
+const WINT = THEME === 'winter';     // третий вариант: зимняя тема
 
 // «Թերթեք» прокручивает к фото скриптом: во втором варианте стоит <base href="../">, и простая ссылка #photo увела бы на первый
 document.querySelector('.scroll-hint')?.addEventListener('click', e => {
@@ -50,19 +52,19 @@ function brush(seed, w = 640, h = 240) {
   const x = c.getContext('2d');
   x.translate(w / 2, h / 2); x.rotate(rnd(-.07, .04)); x.translate(-w / 2, -h / 2);
   x.lineCap = 'round';
-  const cols = ['#e9dcc6', '#e2d2b7', '#efe5d4', '#dccaa9', '#e6d6bd'];
+  const cols = WINT ? ['#dde7f1', '#d0dcea', '#e6eef6', '#c5d4e5', '#d8e3ee'] : ['#e9dcc6', '#e2d2b7', '#efe5d4', '#dccaa9', '#e6d6bd'];
   for (let i = 0; i < 95; i++) {
     const v = (R() - .5) * 2, yy = h / 2 + v * h * .3, edge = Math.abs(v);
     const x0 = w * (.04 + R() * .1 + edge * edge * .16), x1 = w * (.96 - R() * .12 - edge * edge * .18);
     x.strokeStyle = pick(cols); x.globalAlpha = rnd(.25, .55); x.lineWidth = rnd(4, 18) * (1 - edge * .6);
     x.beginPath(); x.moveTo(x0, yy + rnd(-5, 5)); x.bezierCurveTo(w * .35, yy + rnd(-12, 12), w * .65, yy + rnd(-12, 12), x1, yy + rnd(-6, 6)); x.stroke();
   }
-  x.globalAlpha = .35; x.strokeStyle = '#cbb592';
+  x.globalAlpha = .35; x.strokeStyle = WINT ? '#b3c4d8' : '#cbb592';
   for (let i = 0; i < 46; i++) {
     const yy = h / 2 + (R() - .5) * h * .58, x0 = w * rnd(.03, .45), x1 = x0 + w * rnd(.15, .5);
     x.lineWidth = rnd(.5, 1.5); x.beginPath(); x.moveTo(x0, yy); x.quadraticCurveTo((x0 + x1) / 2, yy + rnd(-4, 4), x1, yy + rnd(-3, 3)); x.stroke();
   }
-  x.globalAlpha = .55; x.strokeStyle = '#faf6ee';
+  x.globalAlpha = .55; x.strokeStyle = WINT ? '#f8fbfd' : '#faf6ee';
   for (let i = 0; i < 22; i++) {
     const yy = h / 2 + (R() - .5) * h * .5, x0 = w * rnd(.1, .6), x1 = x0 + w * rnd(.1, .35);
     x.lineWidth = rnd(.6, 2.2); x.beginPath(); x.moveTo(x0, yy); x.lineTo(x1, yy + rnd(-3, 3)); x.stroke();
@@ -83,11 +85,13 @@ function sprig(seed) {
   const x = c.getContext('2d');
   const cols = BURG
     ? [['#a32a4f', '#7f1a38'], ['#c46581', '#a0405e'], ['#851838', '#62102a'], ['#d692a6', '#b46c83']]
+    : WINT
+    ? [['#8fa4c0', '#6d84a6'], ['#b4c4d8', '#90a5c0'], ['#6f86a8', '#536a8d'], ['#cbd7e5', '#a9bad0']]
     : [['#8d9b6c', '#738256'], ['#a3b07f', '#86955f'], ['#7a8a5a', '#617047'], ['#b5c094', '#98a676']];
   const branch = (x0, y0, len, ang, bend, L) => {
     const N = 24, pts = []; let px = x0, py = y0, a = ang;
     for (let i = 0; i <= N; i++) { pts.push([px, py, a]); a += bend / N; px += Math.cos(a) * len / N; py += Math.sin(a) * len / N; }
-    x.strokeStyle = BURG ? '#6e1630' : '#6a774f'; x.lineWidth = 1.5; x.lineCap = 'round';
+    x.strokeStyle = BURG ? '#6e1630' : WINT ? '#5d7393' : '#6a774f'; x.lineWidth = 1.5; x.lineCap = 'round';
     x.beginPath(); x.moveTo(pts[0][0], pts[0][1]); pts.forEach(p => x.lineTo(p[0], p[1])); x.stroke();
     for (let i = 2; i < N; i += 2) {
       const [qx, qy, qa] = pts[i], t = i / N, l = L * (1 - t * .45) * rnd(.85, 1.15);
@@ -98,7 +102,7 @@ function sprig(seed) {
   branch(24, 46, 300, .02, .95, 30);
   branch(46, 24, 250, 1.45, -.75, 27);
   branch(40, 40, 170, .72, .25, 22);
-  x.fillStyle = BURG ? '#e3b7c4' : '#c9a9a4';
+  x.fillStyle = BURG ? '#e3b7c4' : WINT ? '#c9d7e7' : '#c9a9a4';
   for (let i = 0; i < 7; i++) { x.beginPath(); x.arc(rnd(70, 150), rnd(70, 150), rnd(2.5, 4), 0, Math.PI * 2); x.fill(); }
   return c.toDataURL('image/png');
 }

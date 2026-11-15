@@ -170,7 +170,7 @@ a{color:inherit;text-decoration:none}
 .venue-label{font:600 10.5px/1.4 var(--sans);letter-spacing:.32em;text-transform:uppercase;color:var(--sage)}
 .venue-name{margin-top:8px;font:400 22px/1.25 var(--serif);font-stretch:88%;color:var(--ink)}
 .sketch{display:block;width:100%;max-width:330px;margin:10px auto 0;fill:none;stroke:#4b453b;stroke-width:1.15;stroke-linecap:round;stroke-linejoin:round}
-.sketch .f{fill:#fbf8f2}
+.sketch .f{fill:var(--cream)}
 .sketch .t{stroke-width:.8;stroke:#7d7466}
 /* набросок «рисуется» по мере прокрутки: --d от 1 (пусто) до 0 (готово) задаёт app.js */
 .sketch [pathLength]{stroke-dasharray:1 2;stroke-dashoffset:var(--d,0)}
@@ -270,6 +270,46 @@ fieldset{border:0;min-width:0}
 [data-theme=burgundy] .scroll-hint{box-shadow:0 8px 22px rgba(45,10,22,.28),0 0 0 1px rgba(145,30,66,.3)}
 [data-theme=burgundy] .slider svg{filter:drop-shadow(0 3px 5px rgba(100,15,40,.3))}
 [data-theme=burgundy] .ev-map{color:var(--ink)}
+
+/* ========== Вариант 3: зимняя тема (3/index.html, <html data-theme="winter">) ==========
+   Снежно-белый фон, ледяной голубой, пыльно-синий акцент, тёмно-синий текст; конверт синий, печать белая (в scene.js). */
+[data-theme=winter]{
+  --cream:#f5f8fb; --paper:#eaf0f6; --beige:#dfe8f1; --sand:#b9c7d8;
+  --sage:#5a7194; --sage-d:#3f5577; --sage-l:#d6e1ec; --olive:#2f4262;
+  --rose:#6f86a8; --rose-d:#2f4262;
+  --ink:#27324a; --ink-2:#4f5b72; --muted:#8a96a9;
+  --night:#1e2739;
+}
+[data-theme=winter] body{background:#7d93b2}
+[data-theme=winter] body::before{background:radial-gradient(120% 90% at 50% 40%,#d3dfec 0%,#9fb3cd 55%,#6d84a6 100%)}
+[data-theme=winter] .paper{background-color:#5f7698;
+  background-image:var(--grain,none),var(--emboss,none),var(--marble,none),radial-gradient(130% 90% at 50% 35%,#7a90b1 0%,#5e7597 55%,#465c7f 100%)}
+[data-theme=winter] .hero{background:#e8eef5}
+[data-theme=winter] .sky{background:linear-gradient(180deg,#e9f0f7 0%,#f5f8fc 30%,#f2f6fa 50%,#e3eaf3 70%,#d5dfeb 100%)}
+[data-theme=winter] .sun{background:radial-gradient(closest-side,rgba(255,255,255,.95),rgba(255,255,255,0))}
+[data-theme=winter] .hero-glow{background:radial-gradient(closest-side,rgba(246,249,252,.8),rgba(246,249,252,0))}
+[data-theme=winter] .names{text-shadow:0 0 18px rgba(246,249,252,.95),0 0 4px rgba(246,249,252,.95)}
+[data-theme=winter] .scroll-hint{background:rgba(255,255,255,.95);box-shadow:0 8px 22px rgba(30,40,60,.24),0 0 0 1px rgba(90,113,148,.3)}
+[data-theme=winter] .slider svg{filter:drop-shadow(0 3px 5px rgba(40,60,95,.3))}
+[data-theme=winter] .photo-hero::after{background:linear-gradient(180deg,rgba(245,248,251,0) 62%,rgba(245,248,251,.88) 86%,var(--cream) 100%)}
+[data-theme=winter] .flourish{color:#9fb0c6}
+[data-theme=winter] .rt-dots{stroke:#9fb3cc}
+[data-theme=winter] .cal::before{border-color:#cdd9e6}
+[data-theme=winter] .cal::after{border-color:rgba(90,113,148,.25)}
+[data-theme=winter] .ev-map{color:var(--ink)}
+[data-theme=winter] .btn-o{background:rgba(245,248,251,.7)}
+[data-theme=winter] .fld input,[data-theme=winter] .fld select{border-bottom-color:#c9d4e1}
+[data-theme=winter] .fld input::placeholder{color:#a3afc0}
+[data-theme=winter] .btn-dark{color:#eef3f8}
+[data-theme=winter] .mail-flap{background:#d3dde9}
+[data-theme=winter] .mail-back{background:#dfe7f0;box-shadow:0 22px 34px rgba(30,45,70,.18)}
+[data-theme=winter] .mail-card{background:#fff;box-shadow:0 2px 12px rgba(30,45,70,.12)}
+[data-theme=winter] .mail-front{background:linear-gradient(170deg,#edf2f8,#dce5ef);filter:drop-shadow(0 -1px 2px rgba(30,45,70,.16))}
+[data-theme=winter] .foot{color:#d8e2ee}
+[data-theme=winter] .mono{color:#e4ecf5}
+[data-theme=winter] .mono i{color:#9fb0c6}
+[data-theme=winter] .foot .s{color:#8494ad}
+[data-theme=winter] .music{background:rgba(255,255,255,.85)}
 
 @media (prefers-reduced-motion:reduce){
   .rv{transition:opacity .6s ease;transform:none}

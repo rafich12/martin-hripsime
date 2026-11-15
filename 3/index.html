@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="hy" data-theme="winter">
+<head>
+<meta charset="utf-8">
+<base href="../">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Մարտին & Հռիփսիմե — հարսանեկան հրավեր</title>
+<meta name="description" content="Հարսանեկան հրավեր · 23 · 01 · 2027">
+<meta name="theme-color" content="#5a7194">
+<!-- превью ссылки в Telegram, WhatsApp и т. п. -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Մարտին & Հռիփսիմե — հարսանեկան հրավեր">
+<meta property="og:description" content="23 · 01 · 2027">
+<meta property="og:image" content="https://rafich12.github.io/martin-hripsime/img/hero.jpg">
+<meta property="og:url" content="https://rafich12.github.io/martin-hripsime/3/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&family=Google+Sans:wght@400..700&family=Noto+Serif+Armenian:wdth,wght@62.5..100,100..900&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="locked">
+<div class="app">
+
+  <!-- 0. Конверт: печать → клапан открывается → камера ныряет внутрь -->
+  <div class="env loading" id="env">
+    <div class="env-pocket" id="envPocket">
+      <div class="paper paper-pocket"></div>
+      <svg class="folds" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <path class="fold-sh" d="M0 100 L50 69 L100 100"/>
+        <path class="fold-hi" d="M0 99.5 L50 68.5 L100 99.5"/>
+        <path class="edge-hi" d="M0 0 L50 60 L100 0"/>
+      </svg>
+      <p class="env-names"><span data-t="groom"></span> <i>&amp;</i> <span data-t="bride"></span></p>
+      <p class="env-hint">Սեղմեք կնիքին՝ հրավերը բացելու համար</p>
+    </div>
+    <div class="env-flap-wrap"><div class="env-flap" id="envFlap"><div class="paper paper-flap"></div></div></div>
+    <div class="env-seal-wrap" id="sealWrap">
+      <p class="env-top">Հարսանեկան հրավեր</p>
+      <button class="seal" id="seal" type="button" aria-label="Բացել հրավերը">
+        <span class="seal-ring"></span>
+        <svg id="sealSvg" viewBox="0 0 120 120" aria-hidden="true"></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- 1. Заставка: пролёт через деревья к арке с фото пары -->
+  <header class="hero" id="hero">
+    <div class="scene" id="scene">
+      <div class="sky"></div>
+      <div class="sun"></div>
+      <div class="vig" id="vig"></div>
+    </div>
+    <div class="hero-glow" data-a="glow"></div>
+    <!-- имена над парой; дата и надпись «Հարսանեկան հրավեր» здесь убраны по просьбе Рафа -->
+    <div class="hero-text">
+      <h1 class="names">
+        <span class="n1" data-a="n1" data-t="groom"></span>
+        <span class="amp" data-a="amp">&amp;</span>
+        <span class="n2" data-a="n2" data-t="bride"></span>
+      </h1>
+    </div>
+    <a class="scroll-hint" href="#photo" data-a="hint" aria-label="Թերթել ներքև">
+      <span>Թերթեք</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+    </a>
+  </header>
+
+  <main>
+    <!-- 2. Фото пары с датой -->
+    <section class="photo-hero" id="photo">
+      <img data-photo="hero" alt="">
+      <div class="ph-date rv"><span data-t="_.dd"></span><span data-t="_.mm"></span><span data-t="_.yy2"></span></div>
+      <p class="ph-names rv"><span data-t="groom"></span> <i>&amp;</i> <span data-t="bride"></span></p>
+    </section>
+
+    <!-- 3. Обращение -->
+    <section class="sec invite">
+      <svg class="flourish rv" viewBox="0 0 240 30" aria-hidden="true"><use href="#flourish"/></svg>
+      <h2 class="h rv" data-t="invite.title"></h2>
+      <p class="lead rv" data-t="invite.text"></p>
+    </section>
+
+    <!-- 4. Программа дня: тропинка с сердечками -->
+    <section class="sec program" id="program">
+      <p class="label rv">Օրվա ծրագիր</p>
+      <p class="month rv" data-t="_.month"></p>
+      <div class="days rv" id="days"></div>
+      <div class="route" id="route">
+        <svg class="rt" id="routeSvg" aria-hidden="true">
+          <defs><mask id="rtMask" maskUnits="userSpaceOnUse"><path id="rtMaskPath" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"/></mask></defs>
+          <path id="rtPath" class="rt-dots" mask="url(#rtMask)"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- 5. Календарь и таймер -->
+    <section class="sec calendar">
+      <div class="cal rv">
+        <i class="sprig tl"></i><i class="sprig br"></i>
+        <p class="cal-title" data-t="_.month"></p>
+        <div class="cal-grid" id="calGrid"></div>
+      </div>
+      <p class="label count-label rv">Մինչ հարսանիքը մնաց</p>
+      <div class="count rv" id="count">
+        <div><b data-c="d">00</b><span>Օր</span></div>
+        <div><b data-c="h">00</b><span>Ժամ</span></div>
+        <div><b data-c="m">00</b><span>Րոպե</span></div>
+        <div><b data-c="s">00</b><span>Վայրկյան</span></div>
+      </div>
+    </section>
+
+    <!-- 6. Фото -->
+    <figure class="photo-2 rv"><img data-photo="gallery" alt="" loading="lazy"></figure>
+
+    <!-- 7. Места проведения -->
+    <section class="sec venues">
+      <svg class="rings rv" viewBox="0 0 80 52" aria-hidden="true">
+        <circle cx="31" cy="32" r="15"/><circle cx="49" cy="32" r="15"/>
+        <path d="M27 13l4-5 4 5-4 5z"/><path d="M58 9v6M55 12h6M66 18v4M64 20h4"/>
+      </svg>
+      <h2 class="h rv">Հասցեներ</h2>
+      <div id="venues"></div>
+    </section>
+
+    <!-- 8. Save the date -->
+    <section class="save">
+      <div class="save-top rv">
+        <p class="save-big">Save <i>the</i> Date</p>
+        <p class="save-d" data-t="_.dateLong"></p>
+      </div>
+      <figure class="save-photo rv"><img data-photo="save" alt="" loading="lazy"></figure>
+    </section>
+
+    <!-- 9. Анкета гостя: ответы уходят на почту (data.js → rsvp.email) -->
+    <section class="sec rsvp" id="rsvp">
+      <i class="brush brush-rsvp"></i>
+      <h2 class="h rv">Հարցաթերթիկ</h2>
+      <p class="lead rv">Խնդրում ենք հաստատել Ձեր մասնակցությունը մինչև <span data-t="rsvp.until"></span></p>
+      <form id="rsvpForm" class="rv" novalidate>
+        <label class="fld"><span>Անուն Ազգանուն</span><input name="name" autocomplete="name" required></label>
+        <fieldset>
+          <legend>Կմասնակցե՞ք</legend>
+          <label class="opt"><input type="radio" name="attend" value="Այո, սիրով" required><i></i>Այո, սիրով</label>
+          <label class="opt"><input type="radio" name="attend" value="Ցավոք, չեմ կարող"><i></i>Ցավոք, չեմ կարող</label>
+        </fieldset>
+        <fieldset>
+          <legend>Ո՞ր կողմից եք</legend>
+          <label class="opt"><input type="radio" name="side" value="Փեսայի"><i></i>Փեսայի</label>
+          <label class="opt"><input type="radio" name="side" value="Հարսի"><i></i>Հարսի</label>
+        </fieldset>
+        <label class="fld"><span>Քանի՞ հոգի կլինեք</span><input name="count" type="number" inputmode="numeric" min="1" max="99" placeholder="Օրինակ՝ 2"></label>
+        <input class="hp" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <p class="form-err" id="formErr" hidden>Խնդրում ենք լրացնել անունը և նշել՝ կմասնակցեք, թե ոչ։</p>
+        <button class="btn-dark" type="submit">Ուղարկել</button>
+      </form>
+      <div class="rsvp-done" id="rsvpDone" hidden>
+        <p class="thanks">Շնորհակալություն</p>
+        <p class="lead">Ձեր պատասխանը ստացվել է։ Անհամբեր սպասում ենք հանդիպմանը։</p>
+      </div>
+    </section>
+
+    <!-- 10. Письмо -->
+    <section class="sec letter">
+      <div class="mail rv">
+        <div class="mail-flap"></div>
+        <div class="mail-back"></div>
+        <div class="mail-card"><p class="note" data-t="letter"></p><p class="sig"><span data-t="groom"></span> և <span data-t="bride"></span></p></div>
+        <div class="mail-front"></div>
+      </div>
+    </section>
+
+    <!-- 11. Фото в конце -->
+    <figure class="photo-end rv"><img data-photo="end" alt="" loading="lazy"></figure>
+
+    <footer class="foot">
+      <p class="mono"><span data-t="initials.0"></span> <i>&amp;</i> <span data-t="initials.1"></span></p>
+      <p class="d" data-t="_.dateDots"></p>
+      <p class="s">Սիրով սպասում ենք Ձեզ</p>
+    </footer>
+  </main>
+
+  <button class="music" id="music" type="button" hidden aria-label="Երաժշտություն"><i></i><i></i><i></i></button>
+</div>
+
+<!-- общий орнамент -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="flourish" viewBox="0 0 240 30">
+    <g fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round">
+      <g id="flHalf">
+        <path d="M110 15 C100 15 95 8 87 8 C79 8 76 16 82 19 C87 21 91 15 86 12"/>
+        <path d="M87 8 C70 3 56 21 40 16 C30 13 24 15 12 15"/>
+        <path d="M66 10 C62 4 54 4 52 9"/>
+        <path d="M62 17 C57 24 49 24 46 19"/>
+        <path d="M30 14 C26 10 20 11 19 15"/>
+      </g>
+      <use href="#flHalf" transform="matrix(-1 0 0 1 240 0)"/>
+      <path d="M120 9 L126 15 L120 21 L114 15 Z"/>
+    </g>
+    <circle cx="120" cy="15" r="1.6" fill="currentColor"/>
+  </symbol>
+</svg>
+
+<script src="data.js"></script>
+<script src="scene.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
