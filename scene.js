@@ -538,11 +538,15 @@ function loop(now) {
   if (t < T.end) requestAnimationFrame(loop); else finish();
 }
 let wantStart = false, audio = null;
+function playMusic() {
+  if (!audio || !audio.paused) return;
+  audio.play().then(() => musicBtn.classList.remove('off')).catch(() => musicBtn.classList.add('off'));
+}
 function start() {
   if (running) return;
+  playMusic();   // сразу в момент нажатия: телефоны разрешают звук только в ответ на касание
   if (!READY) { wantStart = true; env.classList.add('loading'); return; }
   running = true;
-  if (audio) audio.play().then(() => musicBtn.classList.remove('off')).catch(() => musicBtn.classList.add('off'));
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
     env.style.transition = 'opacity .7s'; env.style.opacity = 0;
     setTimeout(() => { frozen = false; finish(); }, 700);
@@ -563,12 +567,22 @@ window.introAt = introAt;
 env.addEventListener('click', start);
 seal.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); start(); } });
 
-// музыка
+// музыка: файл уже обрезан с нужного места, поэтому повтор идёт по кругу всего файла
 const musicBtn = $('music');
-if (D.music) {
-  audio = new Audio(D.music); audio.loop = true; audio.preload = 'auto';
+const MUSIC = (D.musicByTheme || {})[THEME] || D.music;
+let userPaused = false;
+if (MUSIC) {
+  audio = new Audio(MUSIC); audio.loop = true; audio.preload = 'auto';
   musicBtn.hidden = false; musicBtn.classList.add('off');
-  musicBtn.addEventListener('click', () => { if (audio.paused) { audio.play(); musicBtn.classList.remove('off'); } else { audio.pause(); musicBtn.classList.add('off'); } });
+  musicBtn.addEventListener('click', () => {
+    if (audio.paused) { userPaused = false; playMusic(); }
+    else { userPaused = true; audio.pause(); musicBtn.classList.add('off'); }
+  });
+  // свернули вкладку или заблокировали телефон — пауза; вернулись — играет дальше (если гость сам не выключил)
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) { if (!audio.paused) audio.pause(); }
+    else if (running && !userPaused) playMusic();
+  });
 }
 
 // при смене размера окна сцена масштабируется, чтобы закрывать экран
